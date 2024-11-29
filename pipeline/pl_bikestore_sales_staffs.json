@@ -1,0 +1,227 @@
+{
+	"name": "pl_bikestore_sales_staffs",
+	"properties": {
+		"activities": [
+			{
+				"name": "ObtenerParametros",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "DECLARE\r\n\t@FechaInicio DATE\r\n\t,@FechaFin DATE\r\n\t,@DiasBorrarCargar INT\r\n\t,@Contenedor VARCHAR(5)\r\n\t,@MedallaBronce VARCHAR(25)\r\n\r\nSELECT @FechaFin = MAX(Valor) FROM dbo.Parametros WHERE Clave = 'FechaProceso';\r\nSELECT @DiasBorrarCargar = (MAX(Valor) * -1) FROM dbo.Parametros WHERE Clave = 'DiasCargarBorrar';\r\nSELECT TOP 1 @Contenedor = Valor FROM dbo.Parametros WHERE Clave = 'ContenedorLagoDatosReg' ORDER BY Codigo ASC;\r\nSELECT TOP 1 @MedallaBronce = Valor FROM dbo.Parametros WHERE Clave = 'MedallaBronce' ORDER BY Codigo ASC;\r\nSET @FechaInicio = DATEADD(DAY, @DiasBorrarCargar, @FechaFin)\r\n\r\nDECLARE @TablaTemporal TABLE (FechaProceso DATE, Contenedor VARCHAR(5), Medalla VARCHAR(25));\r\n\r\nWHILE @FechaInicio <= @FechaFin \r\nBEGIN \r\n\t\r\n\tINSERT INTO @TablaTemporal \r\n\tVALUES (@FechaInicio, @Contenedor, @MedallaBronce);\r\n\r\n\tSET @FechaInicio = DATEADD(DAY, 1, @FechaInicio);\r\n\r\nEND \r\n\r\nSELECT FechaProceso, Contenedor, Medalla FROM @TablaTemporal;",
+						"queryTimeout": "00:25:00",
+						"isolationLevel": "ReadCommitted",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_azuresql_configuracion_parametros",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "RecorrerFechas",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "ObtenerParametros",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('ObtenerParametros').output.value",
+						"type": "Expression"
+					},
+					"batchCount": 5,
+					"activities": [
+						{
+							"name": "IngestaDatos",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.00:10:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"queryTimeout": "00:20:00",
+									"isolationLevel": "ReadCommitted",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"parallelCopies": 1,
+								"dataIntegrationUnits": 4,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "staff_id",
+												"type": "Int32",
+												"physicalType": "int"
+											},
+											"sink": {
+												"name": "staff_id",
+												"type": "Int32",
+												"physicalType": "INT_32"
+											}
+										},
+										{
+											"source": {
+												"name": "first_name",
+												"type": "String",
+												"physicalType": "varchar"
+											},
+											"sink": {
+												"name": "first_name",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "last_name",
+												"type": "String",
+												"physicalType": "varchar"
+											},
+											"sink": {
+												"name": "last_name",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "email",
+												"type": "String",
+												"physicalType": "varchar"
+											},
+											"sink": {
+												"name": "email",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "phone",
+												"type": "String",
+												"physicalType": "varchar"
+											},
+											"sink": {
+												"name": "phone",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "active",
+												"type": "Byte",
+												"physicalType": "tinyint"
+											},
+											"sink": {
+												"name": "active",
+												"type": "Byte",
+												"physicalType": "INT_32"
+											}
+										},
+										{
+											"source": {
+												"name": "store_id",
+												"type": "Int32",
+												"physicalType": "int"
+											},
+											"sink": {
+												"name": "store_id",
+												"type": "Int32",
+												"physicalType": "INT_32"
+											}
+										},
+										{
+											"source": {
+												"name": "manager_id",
+												"type": "Int32",
+												"physicalType": "int"
+											},
+											"sink": {
+												"name": "manager_id",
+												"type": "Int32",
+												"physicalType": "INT_32"
+											}
+										}
+									],
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_bikestores_sales_staffs_sql",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_datalake_sales_staffs_parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"FechaProceso": {
+											"value": "@substring(item().FechaProceso, 0, 10)",
+											"type": "Expression"
+										},
+										"Contenedor": {
+											"value": "@item().Contenedor",
+											"type": "Expression"
+										},
+										"MedallaBronce": {
+											"value": "@item().Medalla",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"folder": {
+			"name": "Bronze/pipelines"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-11-24T20:15:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

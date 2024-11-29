@@ -1,0 +1,14 @@
+{
+	"name": "dafaownlab30",
+	"properties": {
+		"globalConfigurations": {
+			"PipelineBillingEnabled": "true"
+		}
+	},
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6e2acd55-f535-4a61-9869-3e77207b0202",
+		"tenantId": "dc97c956-e32d-4ca4-a19e-31faf0bb93d2"
+	}
+}

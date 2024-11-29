@@ -1,0 +1,28 @@
+{
+	"name": "ls_stacownlab30_datalake",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"UrlDataLake": {
+				"type": "string",
+				"defaultValue": "https://stacownlab30.dfs.core.windows.net"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "@{linkedService().UrlDataLake}",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_kevaownlab30",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"UrlKeyVault": "https://kevaownlab30.vault.azure.net/"
+					}
+				},
+				"secretName": "secrstacownlab30"
+			}
+		}
+	}
+}

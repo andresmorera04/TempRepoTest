@@ -1,0 +1,30 @@
+{
+	"name": "ds_bikestores_production_categories_sql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_source_devvertixddnsnet_BikeStores",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Sources/devvertixddnsnet"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "category_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "category_name",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "production",
+			"table": "categories"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
