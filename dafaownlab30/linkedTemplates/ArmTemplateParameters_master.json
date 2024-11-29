@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "dafaownlab30"
+		},
+		"ls_sftp_data_password": {
+			"value": ""
+		},
+		"ls_azuresql_configuracion_properties_typeProperties_connectionString_secretName": {
+			"value": "secrazuresqlconfiguracion"
+		},
+		"ls_kevaownlab30_properties_typeProperties_baseUrl": {
+			"value": "@{linkedService().UrlKeyVault}"
+		},
+		"ls_sftp_data_properties_typeProperties_host": {
+			"value": "dev-mssql2019.ddns.net"
+		},
+		"ls_sftp_data_properties_typeProperties_userName": {
+			"value": "usrsftp"
+		},
+		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_server": {
+			"value": "devvertix.ddns.net,5722"
+		},
+		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_database": {
+			"value": "BikeStores"
+		},
+		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_userName": {
+			"value": "integrator"
+		},
+		"ls_stacownlab30_datalake_properties_typeProperties_url": {
+			"value": "@{linkedService().UrlDataLake}"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

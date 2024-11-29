@@ -1,0 +1,235 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "dafaownlab30"
+		},
+		"ls_sftp_data_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_sftp_data'"
+		},
+		"ls_kevaownlab30_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "@{linkedService().UrlKeyVault}"
+		},
+		"ls_sftp_data_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "dev-mssql2019.ddns.net"
+		},
+		"ls_sftp_data_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "usrsftp"
+		},
+		"ls_azuresql_configuracion_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "secrazuresqlconfiguracion"
+		},
+		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "devvertix.ddns.net,5722"
+		},
+		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "BikeStores"
+		},
+		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "integrator"
+		},
+		"ls_stacownlab30_datalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().UrlDataLake}"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_kevaownlab30')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"UrlKeyVault": {
+						"type": "string",
+						"defaultValue": "https://kevaownlab30.vault.azure.net/"
+					}
+				},
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_kevaownlab30_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sftp_data')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Sftp",
+				"typeProperties": {
+					"host": "[parameters('ls_sftp_data_properties_typeProperties_host')]",
+					"port": "2222",
+					"skipHostKeyValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('ls_sftp_data_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_sftp_data_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_configuracion_parametros')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger que se ejecuta diariamente para cambiar los valores de la tabla parametros",
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2024-11-24T20:19:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								1
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_orchestrate_bronze')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2024-11-10T16:00:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								18
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_azuresql_configuracion')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Base de Datos para Configuracion de Azure SQL",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kevaownlab30",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"UrlKeyVault": "https://kevaownlab30.vault.azure.net/"
+							}
+						},
+						"secretName": "[parameters('ls_azuresql_configuracion_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kevaownlab30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_source_devvertixddnsnet_BikeStores')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_server')]",
+					"database": "[parameters('ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_database')]",
+					"encrypt": "optional",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kevaownlab30",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "secrdevvertixddnsnetbikestores"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kevaownlab30')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_stacownlab30_datalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"UrlDataLake": {
+						"type": "string",
+						"defaultValue": "https://stacownlab30.dfs.core.windows.net"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_stacownlab30_datalake_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kevaownlab30",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"UrlKeyVault": "https://kevaownlab30.vault.azure.net/"
+							}
+						},
+						"secretName": "secrstacownlab30"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kevaownlab30')]"
+			]
+		}
+	]
+}
