@@ -7,37 +7,9 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "dafaownlab30"
 		},
-		"ls_sftp_data_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_sftp_data'"
-		},
-		"ls_azuresql_configuracion_properties_typeProperties_connectionString_secretName": {
-			"type": "string",
-			"defaultValue": "secrazuresqlconfiguracion"
-		},
 		"ls_kevaownlab30_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "@{linkedService().UrlKeyVault}"
-		},
-		"ls_sftp_data_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "dev-mssql2019.ddns.net"
-		},
-		"ls_sftp_data_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "usrsftp"
-		},
-		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "devvertix.ddns.net,5722"
-		},
-		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "BikeStores"
-		},
-		"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "integrator"
 		},
 		"ls_stacownlab30_datalake_properties_typeProperties_url": {
 			"type": "string",
@@ -70,29 +42,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"ls_sftp_data_password": {
-						"value": "[parameters('ls_sftp_data_password')]"
-					},
 					"ls_kevaownlab30_properties_typeProperties_baseUrl": {
 						"value": "[parameters('ls_kevaownlab30_properties_typeProperties_baseUrl')]"
-					},
-					"ls_sftp_data_properties_typeProperties_host": {
-						"value": "[parameters('ls_sftp_data_properties_typeProperties_host')]"
-					},
-					"ls_sftp_data_properties_typeProperties_userName": {
-						"value": "[parameters('ls_sftp_data_properties_typeProperties_userName')]"
-					},
-					"ls_azuresql_configuracion_properties_typeProperties_connectionString_secretName": {
-						"value": "[parameters('ls_azuresql_configuracion_properties_typeProperties_connectionString_secretName')]"
-					},
-					"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_server": {
-						"value": "[parameters('ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_server')]"
-					},
-					"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_database": {
-						"value": "[parameters('ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_database')]"
-					},
-					"ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_userName": {
-						"value": "[parameters('ls_source_devvertixddnsnet_BikeStores_properties_typeProperties_userName')]"
 					},
 					"ls_stacownlab30_datalake_properties_typeProperties_url": {
 						"value": "[parameters('ls_stacownlab30_datalake_properties_typeProperties_url')]"
