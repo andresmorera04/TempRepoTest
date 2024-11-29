@@ -1,0 +1,12 @@
+{
+	"name": "RestServiceRestAPI",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "randomuser.me/api/?results=2000",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
