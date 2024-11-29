@@ -4,12 +4,6 @@
 	"parameters": {
 		"factoryName": {
 			"value": "dafaownlab30"
-		},
-		"ls_kevaownlab30_properties_typeProperties_baseUrl": {
-			"value": "@{linkedService().UrlKeyVault}"
-		},
-		"ls_stacownlab30_datalake_properties_typeProperties_url": {
-			"value": "@{linkedService().UrlDataLake}"
 		}
 	}
 }
