@@ -173,63 +173,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_kevaownlab30')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_configuracion_parametros')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Trigger que se ejecuta diariamente para cambiar los valores de la tabla parametros",
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2024-11-24T20:19:00",
-						"timeZone": "Central America Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								1
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_orchestrate_bronze')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2024-11-10T16:00:00",
-						"timeZone": "Central America Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								18
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }
