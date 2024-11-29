@@ -4,6 +4,12 @@
 	"parameters": {
 		"factoryName": {
 			"value": "dafaownlab30"
+		},
+		"DataLakeStorageGen2_accountKey": {
+			"value": ""
+		},
+		"DataLakeStorageGen2_properties_typeProperties_url": {
+			"value": "https://stacownlab30.dfs.core.windows.net/"
 		}
 	}
 }

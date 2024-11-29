@@ -5,11 +5,11 @@
 		"factoryName": {
 			"value": "dafaownlab30"
 		},
-		"ls_kevaownlab30_properties_typeProperties_baseUrl": {
-			"value": "@{linkedService().UrlKeyVault}"
+		"DataLakeStorageGen2_accountKey": {
+			"value": ""
 		},
-		"ls_stacownlab30_datalake_properties_typeProperties_url": {
-			"value": "@{linkedService().UrlDataLake}"
+		"DataLakeStorageGen2_properties_typeProperties_url": {
+			"value": "https://stacownlab30.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"value": ""
