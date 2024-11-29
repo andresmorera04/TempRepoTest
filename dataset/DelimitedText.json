@@ -1,0 +1,40 @@
+{
+	"name": "DelimitedText",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeStorageGen2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Directory": {
+				"type": "string",
+				"defaultValue": "KevinGarro"
+			},
+			"FILE": {
+				"type": "string",
+				"defaultValue": "CRM"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FILE",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "Bronze/Test/@dataset().Directory",
+					"type": "Expression"
+				},
+				"fileSystem": "datalake"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

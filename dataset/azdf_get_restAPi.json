@@ -1,0 +1,12 @@
+{
+	"name": "azdf_get_restAPi",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RestServiceRestAPI",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
