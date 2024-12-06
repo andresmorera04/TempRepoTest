@@ -1,0 +1,17 @@
+{
+	"name": "DS_RandomUsersJSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeStorageGen2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			}
+		},
+		"schema": {}
+	}
+}
