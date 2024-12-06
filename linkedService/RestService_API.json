@@ -1,0 +1,13 @@
+{
+	"name": "RestService_API",
+	"properties": {
+		"description": "Datos de la prueba de Ingeniero de datos enunciado 1",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://randomuser.me/api/?results=2000",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
