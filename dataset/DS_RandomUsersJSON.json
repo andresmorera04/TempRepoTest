@@ -5,11 +5,23 @@
 			"referenceName": "DataLakeStorageGen2",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"NombreConcursante": {
+				"type": "String",
+				"defaultValue": "CainArce"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation"
+				"type": "AzureBlobFSLocation",
+				"fileName": "Users.json",
+				"folderPath": {
+					"value": "@concat('Bronze/Test/',dataset().NombreConcursante)",
+					"type": "Expression"
+				},
+				"fileSystem": "datalake"
 			}
 		},
 		"schema": {}
