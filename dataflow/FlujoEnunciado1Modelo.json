@@ -1,0 +1,73 @@
+{
+	"name": "FlujoEnunciado1Modelo",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "API_RawData",
+						"type": "DatasetReference"
+					},
+					"name": "datosRandomUserGenerator"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatosBronzeModelo",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          body as (info as (page as boolean, results as short, seed as string, version as double), results as (cell as string, dob as (age as short, date as string), email as string, gender as string, id as (name as string, value as string), location as (city as string, coordinates as (latitude as double, longitude as double), country as string, postcode as string, state as string, street as (name as string, number as short), timezone as (description as string, offset as string)), login as (md5 as string, password as string, salt as string, sha1 as string, sha256 as string, username as string, uuid as string), name as (first as string, last as string, title as string), nat as string, phone as string, picture as (large as string, medium as string, thumbnail as string), registered as (age as short, date as string))[]),",
+				"          headers as [string,string]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     httpMethod: 'GET',",
+				"     timeout: 30,",
+				"     paginationRules: ['supportRFC5988' -> 'true'],",
+				"     responseFormat: ['type' -> 'json', 'documentForm' -> 'arrayOfDocuments']) ~> datosRandomUserGenerator",
+				"datosRandomUserGenerator select(mapColumn(",
+				"          {Correo electrónico} = body.results[1].email,",
+				"          {Número de Identificación} = body.results[1].id.value,",
+				"          {Número de Calle} = body.results[1].location.street.number,",
+				"          {Código Postal} = body.results[1].location.postcode,",
+				"          Latitud = body.results[1].location.coordinates.latitude,",
+				"          Logitud = body.results[1].location.coordinates.longitude,",
+				"          {Fecha de Registro} = body.results[1].registered.date,",
+				"          {Fecha de Nacimiento} = body.results[1].dob.date,",
+				"          {URL de la fotografía del usuario} = body.results[1].picture.medium",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          {Correo electrónico},",
+				"          Genero,",
+				"          Ciudad,",
+				"          Estado,",
+				"          Pais,",
+				"          Edad,",
+				"          {Identificación},",
+				"          phone",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
