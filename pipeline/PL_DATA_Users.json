@@ -1,5 +1,5 @@
 {
-	"name": "PL_DATA_RandomUser",
+	"name": "PL_DATA_Users",
 	"properties": {
 		"activities": [
 			{
@@ -44,7 +44,10 @@
 				"outputs": [
 					{
 						"referenceName": "DS_RandomUsersJSON",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"NombreConcursante": "CainArce"
+						}
 					}
 				]
 			}
